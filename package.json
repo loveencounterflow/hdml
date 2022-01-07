@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "cnd": "^9.2.2",
+    "intertype": "^7.7.0",
+    "guy": "^3.1.0"
+  },
+  "name": "hdml",
+  "description": "a very simplistic HTML tag generation library for NodeJS",
+  "version": "1.0.1",
+  "main": "lib/main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loveencounterflow/hdml.git"
+  },
+  "keywords": [
+    "html",
+    "generation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loveencounterflow/hdml/issues"
+  },
+  "homepage": "https://github.com/loveencounterflow/hdml#readme"
+}
