@@ -10,6 +10,7 @@
 - [HDML](#hdml)
   - [API](#api)
   - [Notes](#notes)
+  - [To Do](#to-do)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -42,5 +43,13 @@ HDML is a very simplistic HTML tag generation library for NodeJS
   future.
 
 * All attributes are always written with single quotes.
+
+
+## To Do
+
+* **[–]** parse short tags?
+* **[–]** return objects not strings?
+* **[–]** see simpler interface in webscraper
+
 
 
