@@ -20,13 +20,14 @@
 
 HDML is a very simplistic HTML tag generation library for NodeJS
 
-## API
 
 * **`escape_text: ( text ) ->`**—Escape `text` for use in HTML (by turning all occurrences of `<`, `>`, and
   `&` into `&lt;`, `&gt;`, and `&amp;`, respectively).
 
 * **`escape_atr_text: ( x ) ->`**—apply `escape_text x` and then replace all occurrences of single quotation
   mark and newline characters by `&#39;` and `&#10;`, respectively.
+
+## V1 API
 
 * **`create_tag: ( sigil, tag, atrs = null ) ->`**—Given a `sigil` to mark the role of the tag, a tagname,
   and an optional attributes object, return a HTML tag literal.
@@ -37,6 +38,16 @@ HDML is a very simplistic HTML tag generation library for NodeJS
   atr='value'/>` (not used in HTML5 but in SVG).
 
 * **`create_closing_tag: ( tag ) ->`**—Create a closing tag like `</div>`.
+
+## V2 API
+
+**NOTE**—preliminary version; API will likely change to account for nesting tags with `pair`
+
+* **`open:     ( tag, atrs ) ->`**—create an opening tag.
+* **`close:    ( tag       ) ->`**—create a closing tag.
+* **`single:   ( tag, atrs ) ->`**—create a self-closing tag.
+* **`text:     ( text      ) ->`**—create a properly escaped text.
+* **`pair:     ( tag, atrs = {}, content = '' ) ->`**—create a tag with content.
 
 ## Compact Tagnames
 
@@ -63,10 +74,10 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 * **[–]** add `cfg.default_tag` which allows to get e.g. `<div id='c1' class='bar baz'>` from `#c1.bar.baz`
 * **[–]** implement recommendations, standard as explained in
   https://mathiasbynens.be/notes/unquoted-attribute-values
-* **[–]** integrate `dbay-voge/hdml2`
 
 ## Is Done
 
 * **[+]** validate that attribute values are texts, do not implicitly convert non-text attribute values
 * **[+]** validate that tag names are texts, do not implicitly convert non-text values
+* **[+]** integrate `dbay-voge/hdml2`
 

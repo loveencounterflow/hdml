@@ -93,6 +93,10 @@ class @Hdml
 
   #---------------------------------------------------------------------------------------------------------
   _create_opening_or_selfclosing_tag: ( is_selfclosing, tag, atrs = null ) ->
+    return ( @_create_opening_or_selfclosing_tag_extra is_selfclosing, tag, atrs ).html
+
+  #---------------------------------------------------------------------------------------------------------
+  _create_opening_or_selfclosing_tag_extra: ( is_selfclosing, tag, atrs = null ) ->
     ### TAINT validate or escape tag, atr keys ###
     s     = if is_selfclosing then '/' else ''
     tag_  = tag
@@ -110,9 +114,14 @@ class @Hdml
     ### TAINT code duplication ###
     if ( not tag? ) or ( tag is '' )
       throw new Error "^HDML@2^ illegal compact tag syntax in #{rpr tag_}"
-    return "<#{tag}#{s}>" if ( not atrs? ) or ( ( Object.keys atrs ).length is 0 )
-    atrs_txt = ( "#{k}=#{@escape_atr_text v}" for k, v of atrs ).join ' '
-    return "<#{tag} #{atrs_txt}#{s}>"
+    #.......................................................................................................
+    if ( not atrs? ) or ( ( Object.keys atrs ).length is 0 )
+      html      = "<#{tag}#{s}>"
+    else
+      atrs_txt  = ( "#{k}=#{@escape_atr_text v}" for k, v of atrs ).join ' '
+      html      = "<#{tag} #{atrs_txt}#{s}>"
+    #.......................................................................................................
+    return { tag, html, }
 
   #---------------------------------------------------------------------------------------------------------
   ### TAINT validate or escape tag ###
@@ -145,6 +154,31 @@ class @Hdml
         throw new Error "^HDML@4^ illegal compact tag syntax in #{rpr compact_tagname}"
     return R
 
+
+  #=========================================================================================================
+  # V2 API
+  #---------------------------------------------------------------------------------------------------------
+  open:     ( tag, atrs           ) -> @_create_opening_or_selfclosing_tag false, tag, atrs
+  close:    ( tag                 ) -> @create_closing_tag tag
+  single:   ( tag, atrs           ) -> @_create_opening_or_selfclosing_tag true,  tag, atrs
+  text:     ( text                ) -> @escape_text text
+
+  #---------------------------------------------------------------------------------------------------------
+  pair:     ( tag, atrs = {}, content = '' ) ->
+    switch arity = arguments.length
+      when 1 then null
+      when 2
+        switch ( type = types.type_of atrs )
+          when 'null'   then null
+          when 'text'   then [ tag, atrs, content, ] = [ tag, null, atrs, ]
+          when 'object' then null
+          else throw new Error "^hdml2@1^ expected null, a text or an object, got #{type}"
+      when 3 then null
+      else throw new Error "^hdml2@1^ expected 2 or 3 arguments, got #{arity}"
+    # types.validate.nonempty_text tag
+    # types.validate.text content
+    { tag, html: open_html, } = @_create_opening_or_selfclosing_tag_extra false, tag, atrs
+    return open_html + content + ( @close tag )
 
 ### NOTE default instance: ###
 @HDML = new @Hdml()
