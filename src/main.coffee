@@ -67,6 +67,7 @@ class @Hdml
 
   #-----------------------------------------------------------------------------------------------------------
   create_tag: ( sigil, tag, atrs = null ) ->
+    @types.validate.text tag
     return switch sigil
       when @cfg.open      then @_create_opening_or_selfclosing_tag false, tag, atrs
       when @cfg.selfclose then @_create_opening_or_selfclosing_tag true,  tag, atrs

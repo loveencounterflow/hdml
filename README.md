@@ -53,4 +53,5 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 ## Is Done
 
 * **[+]** validate that attribute values are texts, do not implicitly convert non-text attribute values
+* **[+]** validate that tag names are texts, do not implicitly convert non-text values
 
