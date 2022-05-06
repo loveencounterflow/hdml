@@ -51,6 +51,7 @@ class @Hdml
 
   #-----------------------------------------------------------------------------------------------------------
   escape_text: ( text ) ->
+    @types.validate.text text
     R = text
     R = R.replace /&/g,   '&amp;'
     R = R.replace /</g,   '&lt;'
@@ -58,9 +59,8 @@ class @Hdml
     return R
 
   #-----------------------------------------------------------------------------------------------------------
-  atr_value_as_text: ( x ) ->
-    R = if @types.isa.text x then x else JSON.stringify x
-    R = @escape_text R
+  escape_atr_text: ( text ) ->
+    R = @escape_text text
     R = R.replace /'/g,   '&#39;'
     R = R.replace /\n/g,  '&#10;'
     return "'#{R}'"
@@ -82,7 +82,7 @@ class @Hdml
     ### TAINT validate or escape tag, atr keys ###
     s = if is_selfclosing then '/' else ''
     return "<#{tag}#{s}>" if ( not atrs? ) or ( ( Object.keys atrs ).length is 0 )
-    atrs_txt = ( "#{k}=#{@atr_value_as_text v}" for k, v of atrs ).join ' '
+    atrs_txt = ( "#{k}=#{@escape_atr_text v}" for k, v of atrs ).join ' '
     return "<#{tag} #{atrs_txt}#{s}>"
 
   #-----------------------------------------------------------------------------------------------------------

@@ -23,9 +23,8 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 * **`escape_text: ( text ) ->`**—Escape `text` for use in HTML (by turning all occurrences of `<`, `>`, and
   `&` into `&lt;`, `&gt;`, and `&amp;`, respectively).
 
-* **`atr_value_as_text: ( x ) ->`**—Turn `x` into a string (if it is not a string already) and escape it for
-  use in an HTML attribute value (applying `escape_text()` and then replace all occurrences of single
-  quotation mark and nesline characters by `&#39;` and `&#10;`, respectively).
+* **`escape_atr_text: ( x ) ->`**—apply `escape_text x` and then replace all occurrences of single quotation
+  mark and newline characters by `&#39;` and `&#10;`, respectively.
 
 * **`create_tag: ( sigil, tag, atrs = null ) ->`**—Given a `sigil` to mark the role of the tag, a tagname,
   and an optional attributes object, return a HTML tag literal.
@@ -51,5 +50,7 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 * **[–]** return objects not strings?
 * **[–]** see simpler interface in webscraper
 
+## Is Done
 
+* **[+]** validate that attribute values are texts, do not implicitly convert non-text attribute values
 
