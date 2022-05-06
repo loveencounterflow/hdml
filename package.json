@@ -6,7 +6,7 @@
   },
   "name": "hdml",
   "description": "a very simplistic HTML tag generation library for NodeJS",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "main": "lib/main.js",
   "directories": {
     "lib": "lib"
