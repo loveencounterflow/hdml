@@ -9,8 +9,10 @@
 
 - [HDML](#hdml)
   - [API](#api)
+  - [Compact Tagnames](#compact-tagnames)
   - [Notes](#notes)
   - [To Do](#to-do)
+  - [Is Done](#is-done)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -36,6 +38,15 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 
 * **`create_closing_tag: ( tag ) ->`**—Create a closing tag like `</div>`.
 
+## Compact Tagnames
+
+* **`parse_compact_tagname: ( compact_tagname ) ->`**
+* **`hdml = new Hdml { use_compact_tags: true, strict_compact_tags: true, }`**
+
+`<div#c432.foo.bar>...</div>` => `<div id=c432 class='foo bar'>...</div>`
+`<p.noindent>...</p>` => `<p class=noindent>...</p>`
+
+
 ## Notes
 
 * All tag names will be written as passed-in; this may result in illegal tag names. This may change in the
@@ -49,6 +60,9 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 * **[–]** parse short tags?
 * **[–]** return objects not strings?
 * **[–]** see simpler interface in webscraper
+* **[–]** add `cfg.default_tag` which allows to get e.g. `<div id='c1' class='bar baz'>` from `#c1.bar.baz`
+* **[–]** implement recommendations, standard as explained in
+  https://mathiasbynens.be/notes/unquoted-attribute-values
 
 ## Is Done
 
