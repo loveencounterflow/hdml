@@ -22,10 +22,13 @@ GUY                       = require 'guy'
 #
 #-----------------------------------------------------------------------------------------------------------
 types.declare 'constructor_cfg', tests:
-  "@isa.object x":                  ( x ) -> @isa.object x
-  "@isa.nonempty_text x.open":      ( x ) -> @isa.nonempty_text x.open
-  "@isa.nonempty_text x.selfclose": ( x ) -> @isa.nonempty_text x.selfclose
-  "@isa.nonempty_text x.close":     ( x ) -> @isa.nonempty_text x.close
+  "@isa.object x":                            ( x ) -> @isa.object x
+  "@isa.nonempty_text x.open":                ( x ) -> @isa.nonempty_text x.open
+  "@isa.nonempty_text x.selfclose":           ( x ) -> @isa.nonempty_text x.selfclose
+  "@isa.nonempty_text x.close":               ( x ) -> @isa.nonempty_text x.close
+  "@isa.boolean x.use_compact_tags":          ( x ) -> @isa.boolean x.use_compact_tags
+  "@isa.boolean x.strict_compact_tags":       ( x ) -> @isa.boolean x.strict_compact_tags
+
 
 
 #===========================================================================================================
@@ -35,11 +38,21 @@ class @Hdml
 
   #---------------------------------------------------------------------------------------------------------
   @C: GUY.lft.freeze
+    #.......................................................................................................
     defaults:
       constructor_cfg:
-        open:       '<'
-        selfclose:  '^'
-        close:      '>'
+        open:                 '<'
+        selfclose:            '^'
+        close:                '>'
+        use_compact_tags:     true
+        strict_compact_tags:  true
+    #.......................................................................................................
+    compact_tagname_re        = ///
+      (?<prefix>[^\s.:#]+(?=:)) |
+      (?<id>(?<=#)[^\s.:#]+) |
+      (?<class>(?<=\.)[^\s.:#]+) |
+      (?<tag>[^\s.:#]+)
+      ///ug
 
   #---------------------------------------------------------------------------------------------------------
   constructor: ( cfg ) ->
@@ -81,14 +94,56 @@ class @Hdml
   #---------------------------------------------------------------------------------------------------------
   _create_opening_or_selfclosing_tag: ( is_selfclosing, tag, atrs = null ) ->
     ### TAINT validate or escape tag, atr keys ###
-    s = if is_selfclosing then '/' else ''
+    s     = if is_selfclosing then '/' else ''
+    tag_  = tag
+    if @cfg.use_compact_tags and /[:\.#]/.test tag
+      d   = @parse_compact_tagname tag
+      if d.prefix? then tag = "#{d.prefix}:#{d.tag}"
+      else              tag = d.tag
+      if d.id?
+        throw new Error "^HDML@1^ cannot give two values for ID, got #{d.id}, #{atrs.id}" if atrs?.id?
+        atrs       ?= {}
+        atrs.id     = d.id
+      if d.class?
+        atrs       ?= {}
+        atrs.class  = @_join_classes atrs.class, d.class
+    ### TAINT code duplication ###
+    if ( not tag? ) or ( tag is '' )
+      throw new Error "^HDML@2^ illegal compact tag syntax in #{rpr tag_}"
     return "<#{tag}#{s}>" if ( not atrs? ) or ( ( Object.keys atrs ).length is 0 )
     atrs_txt = ( "#{k}=#{@escape_atr_text v}" for k, v of atrs ).join ' '
     return "<#{tag} #{atrs_txt}#{s}>"
 
   #---------------------------------------------------------------------------------------------------------
   ### TAINT validate or escape tag ###
+  ### TAINT should be legal to pass in a compact tag ###
   create_closing_tag: ( tag ) -> "</#{tag}>"
+
+  #---------------------------------------------------------------------------------------------------------
+  _join_classes: ( atrs_class, d_class ) ->
+    atrs_class ?= []
+    switch ( type = @types.type_of atrs_class )
+      when 'text' then atrs_class = atrs_class.split /\s/
+      when 'list' then null
+    return [ ( new Set [ atrs_class, d_class, ].flat() )... ].join ' '
+
+  #---------------------------------------------------------------------------------------------------------
+  parse_compact_tagname: ( compact_tagname ) ->
+    ### TAINT name -> tag ###
+    R = {}
+    for { groups, } from compact_tagname.matchAll compact_tagname_re
+      for k, v of groups
+        continue if ( not v? ) or ( v is '' )
+        if k is 'class'
+          ( R.class ?= [] ).push v
+        else
+          if ( target = R[ k ] )?
+            throw new Error "^HDML@3^ found duplicate values for #{rpr k}: #{rpr target}, #{rpr v}"
+          R[ k ] = v
+    if @cfg.strict_compact_tags
+      if ( not R.tag? ) or ( R.tag is '' )
+        throw new Error "^HDML@4^ illegal compact tag syntax in #{rpr compact_tagname}"
+    return R
 
 
 ### NOTE default instance: ###
