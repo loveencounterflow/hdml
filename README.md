@@ -63,6 +63,7 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 * **[–]** add `cfg.default_tag` which allows to get e.g. `<div id='c1' class='bar baz'>` from `#c1.bar.baz`
 * **[–]** implement recommendations, standard as explained in
   https://mathiasbynens.be/notes/unquoted-attribute-values
+* **[–]** integrate `dbay-voge/hdml2`
 
 ## Is Done
 
