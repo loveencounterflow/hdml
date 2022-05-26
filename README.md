@@ -65,6 +65,11 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 
 * All attributes are always written with single quotes.
 
+* all attribute values must be strings, except for `true`, `false`, `''`, `none` and `undefined`, which are
+  treated as boolean values with a shortened syntax:
+  * an attribute whose value is **`true`** or the **empty string** is rendered with its name only
+  * an attribute whose value is **`false`**, **`null`** or **`undefined`** is not rendered at all
+
 
 ## To Do
 
@@ -80,4 +85,9 @@ HDML is a very simplistic HTML tag generation library for NodeJS
 * **[+]** validate that attribute values are texts, do not implicitly convert non-text attribute values
 * **[+]** validate that tag names are texts, do not implicitly convert non-text values
 * **[+]** integrate `dbay-voge/hdml2`
+* **[+]** for practical reasons and in accordance with [the *HTML standard: 2.3.2 Boolean
+  attributes*](https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes), make it
+  so that
+  * an attribute whose value is **`true`** or the **empty string** is rendered with its name only
+  * an attribute whose value is **`false`**, **`null`** or **`undefined`** is not rendered at all
 

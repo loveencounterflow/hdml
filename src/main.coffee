@@ -118,8 +118,16 @@ class @Hdml
     if ( not atrs? ) or ( ( Object.keys atrs ).length is 0 )
       html      = "<#{tag}#{s}>"
     else
-      atrs_txt  = ( "#{k}=#{@escape_atr_text v}" for k, v of atrs ).join ' '
-      html      = "<#{tag} #{atrs_txt}#{s}>"
+      atrs_txt  = []
+      for k, v of atrs
+        if v in [ false, null, undefined, ] then continue
+        if v in [ true, '', ]               then atrs_txt.push k; continue
+        atrs_txt.push "#{k}=#{@escape_atr_text v}"
+      atrs_txt  = atrs_txt.join ' '
+      if atrs_txt is ''
+        html  = "<#{tag}#{s}>"
+      else
+        html  = "<#{tag} #{atrs_txt}#{s}>"
     #.......................................................................................................
     return { tag, html, }
 
