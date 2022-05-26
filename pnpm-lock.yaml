@@ -2,12 +2,12 @@ lockfileVersion: 5.3
 
 specifiers:
   cnd: ^9.2.2
-  guy: ^3.1.0
+  guy: 4.2.0
   intertype: ^7.7.0
 
 dependencies:
   cnd: 9.2.2
-  guy: 3.1.0
+  guy: 4.2.0
   intertype: 7.7.0
 
 packages:
@@ -19,10 +19,8 @@ packages:
       jsx-number-format: 0.1.4
     dev: false
 
-  /guy/3.1.0:
-    resolution: {integrity: sha512-5bxlACi0FcjbF/hqDOs0nMyfPLQxzF9so8XJiTDv4g5xuWGOWMs7m/f2wIrstN6JsNlUJiGfxniHX9XoSfaZgg==}
-    peerDependencies:
-      deasync: ^0.1.22
+  /guy/4.2.0:
+    resolution: {integrity: sha512-ppWljP+64o2qH0K1ia3Px9dBPftO4ILN23J9hLHQH+AcGfoBjGd2HDQGAc8rOx3RIyBiwObt8bFJiu0zXPtXmw==}
     dependencies:
       cnd: 9.2.2
       intertype: 7.6.7
